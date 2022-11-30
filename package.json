@@ -1,18 +1,18 @@
 {
-  "name": "pkg-name",
+  "name": "vite-plugin-unocss:bgimg",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "packageManager": "pnpm@7.2.1",
   "description": "",
   "keywords": [],
   "license": "MIT",
   "author": "Enoch <qhxngzx@gmail.com>",
-  "homepage": "https://github.com/enochzzz/pkg-name#readme",
+  "homepage": "https://github.com/enochzzz/vite-plugin-unocss:bgimg#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/enochzzz/pkg-name.git"
+    "url": "git+https://github.com/enochzzz/vite-plugin-unocss:bgimg.git"
   },
-  "bugs": "https://github.com/enochzzz/pkg-name/issues",
+  "bugs": "https://github.com/enochzzz/vite-plugin-unocss:bgimg/issues",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
