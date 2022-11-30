@@ -7,12 +7,12 @@
   "keywords": [],
   "license": "MIT",
   "author": "Enoch <qhxngzx@gmail.com>",
-  "homepage": "https://github.com/enochzzz/vite-plugin-unocss:bgimg#readme",
+  "homepage": "https://github.com/enochzzz/vite-plugin-unocss-bgimg#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/enochzzz/vite-plugin-unocss:bgimg.git"
+    "url": "git+https://github.com/enochzzz/vite-plugin-unocss-bgimg.git"
   },
-  "bugs": "https://github.com/enochzzz/vite-plugin-unocss:bgimg/issues",
+  "bugs": "https://github.com/enochzzz/vite-plugin-unocss-bgimg/issues",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
