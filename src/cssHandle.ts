@@ -1,5 +1,8 @@
-import { readFile, writeFile } from 'fs'
-import { bgImgReg, httpReg, readdirHandle, replaceReg } from './util'
+import path from 'node:path'
+import fs from 'fs-extra'
+import type { ResolvedConfig } from 'vite'
+import { bgImgReg, httpReg, replaceReg } from './util'
+import type { Config } from '.'
 
 /**
  *
@@ -29,24 +32,45 @@ function replaceBgImgCss(content: string, hash: string) {
 
 /**
  *
- * @param dst path
+ * @param resolveDest
  * @param hash
  */
-export function cssHandle(dst: string, hash: string | undefined = '') {
-  readdirHandle(dst, (path: string) => {
-    // const _src = `${src}/${path}`
-    const _dst = `${dst}/${path}`
-    if (!_dst.includes('.css'))
-      return null
-    // content = readFileSync(_dst, { encoding: 'utf8' })
-    readFile(_dst, { encoding: 'utf8' }, (err, content) => {
-      if (err)
-        throw err
-      content = replaceBgImgCss(content, hash) || content
-      writeFile(_dst, content, { encoding: 'utf8' }, (err) => {
+function modifyCssContent(resolveDest: string, hash: string | undefined = '') {
+  fs.readdir(resolveDest, (err: NodeJS.ErrnoException, files: string[]) => {
+    if (err)
+      throw err
+
+    files.forEach(async (i) => {
+      if (!i.includes('.css'))
+        return null
+
+      const filePath = path.resolve(resolveDest, i)
+
+      fs.readFile(filePath, { encoding: 'utf8' }, (err: NodeJS.ErrnoException, content: any) => {
         if (err)
           throw err
+
+        content = replaceBgImgCss(content, hash) || content
+
+        fs.outputFile(filePath, content, { encoding: 'utf8' }, (err) => {
+          if (err)
+            throw err
+        })
       })
     })
   })
+}
+
+/**
+ *
+ * @param config
+ * @param globalConfig
+ * @param hash
+ */
+export function cssHandle(config: Config, globalConfig: ResolvedConfig, hash: string | undefined = '') {
+  const { dest } = config
+  const { root, build } = globalConfig
+  const resolveDest = path.resolve(root, build.outDir, dest)
+
+  modifyCssContent(resolveDest, hash)
 }

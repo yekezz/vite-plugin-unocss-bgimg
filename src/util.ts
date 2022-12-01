@@ -1,41 +1,6 @@
-import { existsSync, mkdir, readdir } from 'fs'
-
 export const bgImgReg = /bgi\-[\w\W]+?\]\{background-image\:url\([\'\"][\w\W]+?\}/g
 export const httpReg = /(http|https):\/\/([\w.]+\/?)\S*/
 export const replaceReg = /(\.[\w]+)(?=[\'\"])/
-
-/**
- *
- * @param _path
- * @param callback
- */
-export function readdirHandle(_path: string, callback: any, errCallback?: any) {
-  // 读取目录中的所有文件/目录
-  readdir(_path, {}, (err, paths) => {
-    if (err) {
-      errCallback()
-      throw err
-    }
-
-    paths.forEach((path) => {
-      callback(path)
-    })
-  })
-}
-
-// 在复制目录前需要判断该目录是否存在，不存在需要先创建目录
-export async function isExists(src: string, dst: string, callback: any) {
-  // 已存在
-  if (existsSync('/etc/passwd')) {
-    await callback(src, dst)
-  }
-  // 不存在
-  else {
-    mkdir(dst, {}, async () => {
-      await callback(src, dst)
-    })
-  }
-}
 
 /**
  *

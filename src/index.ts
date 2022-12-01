@@ -1,4 +1,5 @@
-import { bgImgCopy, bgImgCopyRename } from './bgImgHandle'
+import type { Plugin, ResolvedConfig } from 'vite'
+import { bgImgHandle } from './bgImgHandle'
 import { cssHandle } from './cssHandle'
 import { createHash } from './util'
 
@@ -7,21 +8,19 @@ export interface Config {
   dest: string
 }
 
-export default function (config: Config) {
-  const { src, dest } = config
+export default function (config: Config): Plugin {
   const hash = createHash(8)
+  let globalConfig: ResolvedConfig
   return {
     name: 'vite-plugin-unocss-bgimg',
     apply: 'build',
+    configResolved(_config: ResolvedConfig) {
+      globalConfig = _config
+    },
     async writeBundle() {
       // 给背景图片的css样式加上hash
-      cssHandle(dest, hash)
-      // 复制背景图片
-      bgImgCopy(config)
-    },
-    closeBundle() {
-      // 给背景图片加上hash
-      bgImgCopyRename(src, dest, hash)
+      cssHandle(config, globalConfig, hash)
+      bgImgHandle(config, globalConfig, hash)
     },
   }
 }

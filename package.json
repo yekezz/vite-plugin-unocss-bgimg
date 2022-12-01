@@ -58,5 +58,10 @@
     "unbuild": "^0.7.4",
     "vite": "^2.9.14",
     "vitest": "^0.18.0"
+  },
+  "dependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "chokidar": "^3.5.3",
+    "fs-extra": "^11.1.0"
   }
 }
