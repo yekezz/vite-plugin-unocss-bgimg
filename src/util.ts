@@ -1,6 +1,7 @@
 export const bgImgReg = /bgi\-[\w\W]+?\]\{background-image\:url\([\'\"][\w\W]+?\}/g
 export const httpReg = /(http|https):\/\/([\w.]+\/?)\S*/
-export const replaceReg = /(\.[\w]+)$/
+export const replaceReg = /(\.[\w]+)(?=[\'\"])/
+export const fileNameReg = /(\.[\w]+)$/
 
 /**
  *

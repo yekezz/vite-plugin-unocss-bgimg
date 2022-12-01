@@ -1,6 +1,6 @@
 import path from 'node:path'
 import fs from 'fs-extra'
-import { replaceReg } from './util'
+import { fileNameReg } from './util'
 import type { Config } from '.'
 
 /**
@@ -41,7 +41,7 @@ export function rename(config: Config, globalConfig: any, hash: string | undefin
       throw err
     files.forEach(async (i) => {
       const oldPath = path.resolve(root, build.outDir, dest, i)
-      const newPath = path.resolve(root, build.outDir, dest, i.replace(replaceReg, (_m, p) => {
+      const newPath = path.resolve(root, build.outDir, dest, i.replace(fileNameReg, (_m, p) => {
         return `.${hash}${p}`
       }))
       try {
