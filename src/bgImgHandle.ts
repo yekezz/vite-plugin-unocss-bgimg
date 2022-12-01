@@ -1,6 +1,5 @@
 import path from 'node:path'
 import fs from 'fs-extra'
-import type { ResolvedConfig } from 'vite'
 import { replaceReg } from './util'
 import type { Config } from '.'
 
@@ -22,7 +21,7 @@ async function copy(root: string, rootDest: string, config: Config) {
  *
  * @param config
  */
-export function bgImgCopy(config: Config, globalConfig: ResolvedConfig) {
+export function bgImgCopy(config: Config, globalConfig: any) {
   return copy(globalConfig.root, globalConfig.build.outDir, config)
 }
 
@@ -32,7 +31,7 @@ export function bgImgCopy(config: Config, globalConfig: ResolvedConfig) {
  * @param dst
  * @param hash
  */
-export function rename(config: Config, globalConfig: ResolvedConfig, hash: string | undefined = '') {
+export function rename(config: Config, globalConfig: any, hash: string | undefined = '') {
   const { src, dest } = config
   const { root, build } = globalConfig
   const resolveSrc = path.resolve(root, src)
@@ -42,7 +41,9 @@ export function rename(config: Config, globalConfig: ResolvedConfig, hash: strin
       throw err
     files.forEach(async (i) => {
       const oldPath = path.resolve(root, build.outDir, dest, i)
-      const newPath = path.resolve(root, build.outDir, dest, i.replace(replaceReg, `.${hash}.`))
+      const newPath = path.resolve(root, build.outDir, dest, i.replace(replaceReg, (_m, p) => {
+        return `.${hash}${p}`
+      }))
       try {
         await fs.rename(oldPath, newPath)
       }
@@ -59,7 +60,7 @@ export function rename(config: Config, globalConfig: ResolvedConfig, hash: strin
  * @param globalConfig
  * @param hash
  */
-export async function bgImgHandle(config: Config, globalConfig: ResolvedConfig, hash: string | undefined = '') {
+export async function bgImgHandle(config: Config, globalConfig: any, hash: string | undefined = '') {
   try {
     // copy dir
     await copy(globalConfig.root, globalConfig.build.outDir, config)

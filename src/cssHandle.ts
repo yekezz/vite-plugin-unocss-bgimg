@@ -1,6 +1,5 @@
 import path from 'node:path'
 import fs from 'fs-extra'
-import type { ResolvedConfig } from 'vite'
 import { bgImgReg, httpReg, replaceReg } from './util'
 import type { Config } from '.'
 
@@ -67,7 +66,7 @@ function modifyCssContent(resolveDest: string, hash: string | undefined = '') {
  * @param globalConfig
  * @param hash
  */
-export function cssHandle(config: Config, globalConfig: ResolvedConfig, hash: string | undefined = '') {
+export function cssHandle(config: Config, globalConfig: any, hash: string | undefined = '') {
   const { dest } = config
   const { root, build } = globalConfig
   const resolveDest = path.resolve(root, build.outDir, dest)

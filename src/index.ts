@@ -1,4 +1,3 @@
-import type { Plugin, ResolvedConfig } from 'vite'
 import { bgImgHandle } from './bgImgHandle'
 import { cssHandle } from './cssHandle'
 import { createHash } from './util'
@@ -8,13 +7,13 @@ export interface Config {
   dest: string
 }
 
-export default function (config: Config): Plugin {
+export default function (config: Config) {
   const hash = createHash(8)
-  let globalConfig: ResolvedConfig
+  let globalConfig: any
   return {
     name: 'vite-plugin-unocss-bgimg',
     apply: 'build',
-    configResolved(_config: ResolvedConfig) {
+    configResolved(_config: any) {
       globalConfig = _config
     },
     async writeBundle() {
