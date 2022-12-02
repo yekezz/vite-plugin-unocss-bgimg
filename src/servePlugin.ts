@@ -2,13 +2,18 @@ import chokidar from 'chokidar'
 import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite'
 import { collectFileMap, collectFileMapDebounce } from './util'
 import { serveMiddleware } from './serveMiddleware'
-import type { VitePluginUnocssBgImgOptions } from '.'
+import type { VitePluginUnocssBgImgOptions } from './util'
 
 interface FileMapValue {
   src: string
 }
 export type FileMap = Map<string, FileMapValue[]>
 
+/**
+ *
+ * @param options
+ * @returns
+ */
 export function servePlugin(options: VitePluginUnocssBgImgOptions): Plugin {
   let globalOptions: ResolvedConfig
   let watcher: chokidar.FSWatcher
@@ -24,7 +29,10 @@ export function servePlugin(options: VitePluginUnocssBgImgOptions): Plugin {
       await collectFileMap(options, fileMap)
     },
     configureServer(server: ViteDevServer) {
-      // cannot use server.watcher since disableGlobbing is true
+      const reloadPage = () => {
+        server.ws.send({ type: 'full-reload', path: '*' })
+      }
+
       watcher = chokidar.watch(
         [options].flatMap(option => option.src),
         {
@@ -33,10 +41,11 @@ export function servePlugin(options: VitePluginUnocssBgImgOptions): Plugin {
         },
       )
       watcher.on('add', async () => {
-        await collectFileMapDebounce()
+        await collectFileMapDebounce(options, fileMap)
       })
       watcher.on('unlink', async () => {
-        await collectFileMapDebounce()
+        await collectFileMapDebounce(options, fileMap)
+        reloadPage()
       })
       server.middlewares.use(serveMiddleware(globalOptions.root, fileMap))
     },

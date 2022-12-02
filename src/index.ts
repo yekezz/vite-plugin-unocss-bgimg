@@ -1,12 +1,13 @@
 import type { Plugin } from 'vite'
 import { buildPlugin } from './buildPlugin'
 import { servePlugin } from './servePlugin'
+import type { VitePluginUnocssBgImgOptions } from './util'
 
-export interface VitePluginUnocssBgImgOptions {
-  src: string
-  dest: string
-}
-
-export function UnocssBgImg(options: VitePluginUnocssBgImgOptions): Plugin[] {
+/**
+ *
+ * @param options
+ * @returns
+ */
+export default function UnocssBgImg(options: VitePluginUnocssBgImgOptions): Plugin[] {
   return [servePlugin(options), buildPlugin(options)]
 }

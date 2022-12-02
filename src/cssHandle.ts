@@ -2,7 +2,7 @@ import path from 'node:path'
 import fs from 'fs-extra'
 import type { ResolvedConfig } from 'vite'
 import { bgImgReg, httpReg, replaceReg } from './util'
-import type { VitePluginUnocssBgImgOptions } from '.'
+import type { VitePluginUnocssBgImgOptions } from './util'
 
 /**
  *

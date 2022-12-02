@@ -2,8 +2,13 @@ import type { Plugin, ResolvedConfig } from 'vite'
 import { bgImgHandle } from './bgImgHandle'
 import { cssHandle } from './cssHandle'
 import { createHash } from './util'
-import type { VitePluginUnocssBgImgOptions } from '.'
+import type { VitePluginUnocssBgImgOptions } from './util'
 
+/**
+ *
+ * @param options
+ * @returns
+ */
 export function buildPlugin(options: VitePluginUnocssBgImgOptions): Plugin {
   const hash = createHash(8)
   let globalOptions: ResolvedConfig

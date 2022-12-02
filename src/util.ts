@@ -1,9 +1,13 @@
 import type { FileMap } from './servePlugin'
-import type { VitePluginUnocssBgImgOptions } from '.'
 export const bgImgReg = /bgi\-[\w\W]+?\]\{background-image\:url\([\'\"][\w\W]+?\}/g
 export const httpReg = /(http|https):\/\/([\w.]+\/?)\S*/
 export const replaceReg = /(\.[\w]+)(?=[\'\"])/
 export const fileNameReg = /(\.[\w]+)$/
+
+export interface VitePluginUnocssBgImgOptions {
+  src: string
+  dest: string
+}
 
 /**
  *
@@ -23,6 +27,11 @@ export function createHash(hashLength: number) {
   return hs.join('')
 }
 
+/**
+ *
+ * @param targets
+ * @param fileMap
+ */
 export const updateFileMapFromTargets = (
   targets: VitePluginUnocssBgImgOptions[],
   fileMap: FileMap,
@@ -42,21 +51,33 @@ export const updateFileMapFromTargets = (
   }
 }
 
+/**
+ *
+ * @param delay
+ * @param fn
+ * @param ctx
+ * @returns
+ */
 function debounce(delay = 500, fn: Function, ctx?: any) {
   let timer: NodeJS.Timeout | null = null
 
-  return function () {
+  return function (...params: any[]) {
     if (timer)
       clearTimeout(timer)
 
     timer = setTimeout(() => {
       // eslint-disable-next-line prefer-rest-params
-      fn.apply(ctx, arguments)
+      fn.apply(ctx, params)
       timer = null
     }, delay)
   }
 }
 
+/**
+ *
+ * @param options
+ * @param fileMap
+ */
 export const collectFileMap = (options: VitePluginUnocssBgImgOptions, fileMap: FileMap) => {
   try {
     const copyTargets = [options]
@@ -67,6 +88,9 @@ export const collectFileMap = (options: VitePluginUnocssBgImgOptions, fileMap: F
   }
 }
 
+/**
+ *
+ */
 export const collectFileMapDebounce = debounce(100, async (options: VitePluginUnocssBgImgOptions, fileMap: FileMap) => {
   collectFileMap(options, fileMap)
 })

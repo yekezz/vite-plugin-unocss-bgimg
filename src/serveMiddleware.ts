@@ -10,6 +10,13 @@ import type * as http from 'node:http'
 import { lookup } from 'mrmime'
 import type { FileMap } from './servePlugin'
 
+/**
+ *
+ * @param root
+ * @param fileMap
+ * @param uri
+ * @returns
+ */
 function viaLocal(root: string, fileMap: FileMap, uri: string) {
   if (uri.endsWith('/'))
     uri = uri.slice(0, -1)
@@ -43,6 +50,12 @@ function viaLocal(root: string, fileMap: FileMap, uri: string) {
   return undefined
 }
 
+/**
+ *
+ * @param name
+ * @param stats
+ * @returns
+ */
 function getStaticHeaders(name: string, stats: Stats) {
   let ctype = lookup(name) || ''
   if (ctype === 'text/html') ctype += ';charset=utf-8'
@@ -58,6 +71,12 @@ function getStaticHeaders(name: string, stats: Stats) {
   return headers
 }
 
+/**
+ *
+ * @param headers
+ * @param res
+ * @returns
+ */
 function getMergeHeaders(headers: OutgoingHttpHeaders, res: ServerResponse) {
   headers = { ...headers }
 
@@ -73,6 +92,14 @@ function getMergeHeaders(headers: OutgoingHttpHeaders, res: ServerResponse) {
   return headers
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @param file
+ * @param stats
+ * @returns
+ */
 function sendStatic(
   req: IncomingMessage,
   res: ServerResponse,
@@ -115,6 +142,12 @@ function sendStatic(
   createReadStream(file, opts).pipe(res)
 }
 
+/**
+ *
+ * @param res
+ * @param next
+ * @returns
+ */
 function return404(res: ServerResponse, next: Function) {
   if (next) {
     next()
@@ -124,6 +157,12 @@ function return404(res: ServerResponse, next: Function) {
   res.end()
 }
 
+/**
+ *
+ * @param root
+ * @param fileMap
+ * @returns
+ */
 export function serveMiddleware(
   root: string,
   fileMap: FileMap,
