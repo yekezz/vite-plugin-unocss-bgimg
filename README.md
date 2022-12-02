@@ -72,6 +72,7 @@ Now, you can use your custom rules for normal development, and the packaging wil
 
 <img src="./assets/serve.png" title="serve" style="width:50vw;" />
 </p>
+
 ## License
 
 [MIT](./LICENSE) License © 2022 [Enoch](https://github.com/enochzzz)
