@@ -1,7 +1,8 @@
 import path from 'node:path'
 import fs from 'fs-extra'
+import type { ResolvedConfig } from 'vite'
 import { bgImgReg, httpReg, replaceReg } from './util'
-import type { Config } from '.'
+import type { VitePluginUnocssBgImgOptions } from '.'
 
 /**
  *
@@ -45,11 +46,11 @@ function modifyCssContent(resolveDest: string, hash: string | undefined = '') {
 
       const filePath = path.resolve(resolveDest, i)
 
-      fs.readFile(filePath, { encoding: 'utf8' }, (err: NodeJS.ErrnoException, content: any) => {
+      fs.readFile(filePath, { encoding: 'utf8' }, (err: NodeJS.ErrnoException, content: Buffer) => {
         if (err)
           throw err
 
-        content = replaceBgImgCss(content, hash) || content
+        content = (replaceBgImgCss(content as unknown as string, hash) || content) as Buffer
 
         fs.outputFile(filePath, content, { encoding: 'utf8' }, (err) => {
           if (err)
@@ -62,13 +63,13 @@ function modifyCssContent(resolveDest: string, hash: string | undefined = '') {
 
 /**
  *
- * @param config
- * @param globalConfig
+ * @param options
+ * @param globalOptions
  * @param hash
  */
-export function cssHandle(config: Config, globalConfig: any, hash: string | undefined = '') {
-  const { dest } = config
-  const { root, build } = globalConfig
+export function cssHandle(options: VitePluginUnocssBgImgOptions, globalOptions: ResolvedConfig, hash: string | undefined = '') {
+  const { dest } = options
+  const { root, build } = globalOptions
   const resolveDest = path.resolve(root, build.outDir, dest)
 
   modifyCssContent(resolveDest, hash)

@@ -1,28 +1,21 @@
 import path from 'node:path'
 import fs from 'fs-extra'
+import type { ResolvedConfig } from 'vite'
 import { fileNameReg } from './util'
-import type { Config } from '.'
+import type { VitePluginUnocssBgImgOptions } from '.'
 
 /**
  *
  * @param root
  * @param rootDest
- * @param config
+ * @param options
  * @returns
  */
-async function copy(root: string, rootDest: string, config: Config) {
-  const { src, dest } = config
+async function copy(root: string, rootDest: string, options: VitePluginUnocssBgImgOptions) {
+  const { src, dest } = options
   const resolveSrc = path.resolve(root, src)
   const resolveDest = path.resolve(root, rootDest, dest)
   return fs.copy(resolveSrc, resolveDest)
-}
-
-/**
- *
- * @param config
- */
-export function bgImgCopy(config: Config, globalConfig: any) {
-  return copy(globalConfig.root, globalConfig.build.outDir, config)
 }
 
 /**
@@ -31,9 +24,9 @@ export function bgImgCopy(config: Config, globalConfig: any) {
  * @param dst
  * @param hash
  */
-export function rename(config: Config, globalConfig: any, hash: string | undefined = '') {
-  const { src, dest } = config
-  const { root, build } = globalConfig
+export function rename(options: VitePluginUnocssBgImgOptions, globalOptions: ResolvedConfig, hash: string | undefined = '') {
+  const { src, dest } = options
+  const { root, build } = globalOptions
   const resolveSrc = path.resolve(root, src)
   // 重命名
   fs.readdir(resolveSrc, (err: NodeJS.ErrnoException, files: string[]) => {
@@ -56,16 +49,16 @@ export function rename(config: Config, globalConfig: any, hash: string | undefin
 
 /**
  *
- * @param config
- * @param globalConfig
+ * @param options
+ * @param globalOptions
  * @param hash
  */
-export async function bgImgHandle(config: Config, globalConfig: any, hash: string | undefined = '') {
+export async function bgImgHandle(options: VitePluginUnocssBgImgOptions, globalOptions: ResolvedConfig, hash: string | undefined = '') {
   try {
     // copy dir
-    await copy(globalConfig.root, globalConfig.build.outDir, config)
+    await copy(globalOptions.root, globalOptions.build.outDir, options)
     // rename file
-    rename(config, globalConfig, hash)
+    rename(options, globalOptions, hash)
   }
   catch (error) {
     console.error(error)
