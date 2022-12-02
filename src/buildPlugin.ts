@@ -20,7 +20,7 @@ export function buildPlugin(options: VitePluginUnocssBgImgOptions): Plugin {
     },
     async writeBundle() {
       // 给背景图片的css样式加上hash
-      cssHandle(options, globalOptions, hash)
+      cssHandle(globalOptions, hash)
       bgImgHandle(options, globalOptions, hash)
     },
   }

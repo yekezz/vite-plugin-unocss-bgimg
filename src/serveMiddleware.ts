@@ -6,7 +6,6 @@ import type {
   OutgoingHttpHeaders,
   ServerResponse,
 } from 'node:http'
-import type * as http from 'node:http'
 import { lookup } from 'mrmime'
 import type { FileMap } from './servePlugin'
 
@@ -17,7 +16,7 @@ import type { FileMap } from './servePlugin'
  * @param uri
  * @returns
  */
-function viaLocal(root: string, fileMap: FileMap, uri: string) {
+function getFile(root: string, fileMap: FileMap, uri: string) {
   if (uri.endsWith('/'))
     uri = uri.slice(0, -1)
 
@@ -40,10 +39,9 @@ function viaLocal(root: string, fileMap: FileMap, uri: string) {
         return { filepath, stats }
       }
       catch {
-        // file not found
+        console.error('file not found')
       }
     }
-    // no entry matched for this prefix
     return undefined
   }
 
@@ -56,7 +54,7 @@ function viaLocal(root: string, fileMap: FileMap, uri: string) {
  * @param stats
  * @returns
  */
-function getStaticHeaders(name: string, stats: Stats) {
+function getFileHeaders(name: string, stats: Stats) {
   let ctype = lookup(name) || ''
   if (ctype === 'text/html') ctype += ';charset=utf-8'
 
@@ -100,13 +98,13 @@ function getMergeHeaders(headers: OutgoingHttpHeaders, res: ServerResponse) {
  * @param stats
  * @returns
  */
-function sendStatic(
+function sendFile(
   req: IncomingMessage,
   res: ServerResponse,
   file: string,
   stats: Stats,
 ) {
-  const staticHeaders = getStaticHeaders(file, stats)
+  const staticHeaders = getFileHeaders(file, stats)
 
   if (req.headers['if-none-match'] === staticHeaders.ETag) {
     res.writeHead(304)
@@ -168,26 +166,26 @@ export function serveMiddleware(
   fileMap: FileMap,
 ) {
   // Keep the named function. The name is visible in debug logs via `DEBUG=connect:dispatcher ...`
-  return async function viteServeStaticCopyMiddleware(req: http.IncomingMessage, res: http.ServerResponse, next: Function) {
-    let pathname = req.url
-    if (!pathname)
+  return async function middleware(req: IncomingMessage, res: ServerResponse, next: Function) {
+    let path = req.url
+    if (!path)
       return res.end()
 
-    if (pathname.includes('%')) {
+    if (path.includes('%')) {
       try {
-        pathname = decodeURIComponent(pathname)
+        path = decodeURIComponent(path)
       }
       catch (err) {
         /* malform uri */
       }
     }
 
-    const data = viaLocal(root, fileMap, pathname)
+    const data = getFile(root, fileMap, path)
     if (!data) {
       return404(res, next)
       return
     }
 
-    sendStatic(req, res, data.filepath, data.stats)
+    sendFile(req, res, data.filepath, data.stats)
   }
 }

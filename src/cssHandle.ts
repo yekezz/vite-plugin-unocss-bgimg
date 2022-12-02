@@ -2,7 +2,6 @@ import path from 'node:path'
 import fs from 'fs-extra'
 import type { ResolvedConfig } from 'vite'
 import { bgImgReg, httpReg, replaceReg } from './util'
-import type { VitePluginUnocssBgImgOptions } from './util'
 
 /**
  *
@@ -67,10 +66,9 @@ function modifyCssContent(resolveDest: string, hash: string | undefined = '') {
  * @param globalOptions
  * @param hash
  */
-export function cssHandle(options: VitePluginUnocssBgImgOptions, globalOptions: ResolvedConfig, hash: string | undefined = '') {
-  const { dest } = options
+export function cssHandle(globalOptions: ResolvedConfig, hash: string | undefined = '') {
   const { root, build } = globalOptions
-  const resolveDest = path.resolve(root, build.outDir, dest)
+  const resolveDest = path.resolve(root, build.outDir, build.assetsDir)
 
   modifyCssContent(resolveDest, hash)
 }
