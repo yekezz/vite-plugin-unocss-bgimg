@@ -1,7 +1,7 @@
 # vite-plugin-unocss-bgimg
 
 <p align="center">
-[![NPM version](https://img.shields.io/npm/v/vite-plugin-unocss-bgimg?color=a1b858&label=)](https://www.npmjs.com/package/vite-plugin-unocss-bgimg)
+<a href="https://www.npmjs.com/package/vite-plugin-unocss-bgimg"><img src="https://img.shields.io/npm/v/vite-plugin-unocss-bgimg?color=c95f8b&amp;label=" alt="NPM version"></a>
 </p>
 
 ## Features
