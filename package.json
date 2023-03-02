@@ -1,7 +1,7 @@
 {
   "name": "vite-plugin-unocss-bgimg",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packageManager": "pnpm@7.2.1",
   "description": "",
   "keywords": [],
@@ -50,7 +50,7 @@
     "chokidar": "^3.5.3",
     "fs-extra": "^11.1.0",
     "mrmime": "^1.0.1",
-    "vite": "^3.2.4"
+    "vite": "^4.1.4"
   },
   "devDependencies": {
     "@antfu/ni": "^0.16.3",
